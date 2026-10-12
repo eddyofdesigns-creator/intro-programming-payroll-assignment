@@ -99,7 +99,7 @@ The program also displays the employee's details, performance category, payroll 
 - **Date of Submission:** 23 October 2026
 - **Due date:** 23 October 2026
 - **GitHub repository:** https://github.com/eddyofdesigns-creator/intro-programming-payroll-assignment
-- **LinkedIn profile:** Add your LinkedIn profile URL here.
+- **LinkedIn profile:** https://www.linkedin.com/in/edward-t-jichichi-578806260/
 
 ## 9. References
 
