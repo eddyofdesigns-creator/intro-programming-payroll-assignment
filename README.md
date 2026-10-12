@@ -1,4 +1,4 @@
-Employee Payroll System in C++
+Employee Payroll System 
 
 ## 1. Project Description
 
