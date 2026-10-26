@@ -1,330 +1,356 @@
 
 #include <iostream>
 #include <string>
-#include <iomanip>
-#include <limits>
 
 using namespace std;
 
+int option;
+
+// Customer 1
+string name1 = "Eddy";
+int accountNumber1 = 1001;
+int pin1 = 1111;
+double balance1 = 1000.00;
+
+// Customer 2
+string name2 = "Takatso";
+int accountNumber2 = 1002;
+int pin2 = 2222;
+double balance2 = 2500.00;
+
+// Customer 3
+string name3 = "Lerato";
+int accountNumber3 = 1003;
+int pin3 = 3333;
+double balance3 = 5000.00;
+
+
+// Function to find an account
+int findAccount(int accountNumber)
+{
+    if (accountNumber == accountNumber1)
+    {
+        return 1;
+    }
+    else if (accountNumber == accountNumber2)
+    {
+        return 2;
+    }
+    else if (accountNumber == accountNumber3)
+    {
+        return 3;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+
+// Function to check the PIN
+bool checkPin(int customer, int enteredPin)
+{
+    if (customer == 1 && enteredPin == pin1)
+    {
+        return true;
+    }
+    else if (customer == 2 && enteredPin == pin2)
+    {
+        return true;
+    }
+    else if (customer == 3 && enteredPin == pin3)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+// Function to get a customer's name
+string getName(int customer)
+{
+    if (customer == 1)
+    {
+        return name1;
+    }
+    else if (customer == 2)
+    {
+        return name2;
+    }
+    else
+    {
+        return name3;
+    }
+}
+
+
+// Function to get a customer's balance
+double getBalance(int customer)
+{
+    if (customer == 1)
+    {
+        return balance1;
+    }
+    else if (customer == 2)
+    {
+        return balance2;
+    }
+    else
+    {
+        return balance3;
+    }
+}
+
+
+// Function to update a customer's balance
+void setBalance(int customer, double newBalance)
+{
+    if (customer == 1)
+    {
+        balance1 = newBalance;
+    }
+    else if (customer == 2)
+    {
+        balance2 = newBalance;
+    }
+    else
+    {
+        balance3 = newBalance;
+    }
+}
+
+
+// Function to log in
+int login()
+{
+    int accountNumber;
+    int enteredPin;
+
+    cout << "Enter account number: " << endl;
+    cin >> accountNumber;
+
+    int customer = findAccount(accountNumber);
+
+    if (customer == 0)
+    {
+        cout << "Account not found!" << endl;
+        return 0;
+    }
+
+    cout << "Enter PIN: " << endl;
+    cin >> enteredPin;
+
+    if (checkPin(customer, enteredPin))
+    {
+        cout << "Welcome, " << getName(customer) << "!" << endl;
+        return customer;
+    }
+    else
+    {
+        cout << "Incorrect PIN!" << endl;
+        return 0;
+    }
+}
+
+
+// Function to deposit money
+void deposit()
+{
+    int customer = login();
+
+    if (customer == 0)
+    {
+        return;
+    }
+
+    double amount;
+
+    cout << "Enter amount to deposit: R" << endl;
+    cin >> amount;
+
+    if (amount > 0)
+    {
+        setBalance(customer, getBalance(customer) + amount);
+
+        cout << "Deposit successful!" << endl;
+        cout << "New balance: R" << getBalance(customer) << endl;
+    }
+    else
+    {
+        cout << "Invalid amount. Deposit must be more than 0." << endl;
+    }
+}
+
+
+// Function to withdraw money
+void withdraw()
+{
+    int customer = login();
+
+    if (customer == 0)
+    {
+        return;
+    }
+
+    double amount;
+
+    cout << "Enter amount to withdraw: R" << endl;
+    cin >> amount;
+
+    if (amount <= 0)
+    {
+        cout << "Amount must be more than 0." << endl;
+    }
+    else if (amount > getBalance(customer))
+    {
+        cout << "Insufficient funds!" << endl;
+    }
+    else
+    {
+        setBalance(customer, getBalance(customer) - amount);
+
+        cout << "Withdrawal successful!" << endl;
+        cout << "New balance: R" << getBalance(customer) << endl;
+    }
+}
+
+
+// Function to send cash
+void sendCash()
+{
+    int sender = login();
+
+    if (sender == 0)
+    {
+        return;
+    }
+
+    int recipientAccount;
+    cout << "Enter recipient account number: " << endl;
+    cin >> recipientAccount;
+
+    int recipient = findAccount(recipientAccount);
+
+    if (recipient == 0)
+    {
+        cout << "Recipient account not found!" << endl;
+        return;
+    }
+
+    if (sender == recipient)
+    {
+        cout << "You cannot send cash to your own account!" << endl;
+        return;
+    }
+
+    double amount;
+
+    cout << "Enter amount to send: R" << endl;
+    cin >> amount;
+
+    if (amount <= 0)
+    {
+        cout << "Amount must be more than 0." << endl;
+    }
+    else if (amount > getBalance(sender))
+    {
+        cout << "Insufficient funds!" << endl;
+    }
+    else
+    {
+        setBalance(sender, getBalance(sender) - amount);
+        setBalance(recipient, getBalance(recipient) + amount);
+
+        cout << "Cash sent successfully!" << endl;
+        cout << "Sent to: " << getName(recipient) << endl;
+        cout << "Your new balance: R" << getBalance(sender) << endl;
+    }
+}
+
+
+// Function to check balance
+void checkBalance()
+{
+    int customer = login();
+
+    if (customer == 0)
+    {
+        return;
+    }
+
+    cout << "Account holder: " << getName(customer) << endl;
+    cout << "Account number: ";
+
+    if (customer == 1)
+    {
+        cout << accountNumber1 << endl;
+    }
+    else if (customer == 2)
+    {
+        cout << accountNumber2 << endl;
+    }
+    else
+    {
+        cout << accountNumber3 << endl;
+    }
+
+    cout << "Current balance: R" << getBalance(customer) << endl;
+}
+
+
+// Function to display the menu
+void showMenu()
+{
+    cout << endl;
+    cout << "===== GCC BANK =====" << endl;
+    cout << "1. Deposit" << endl;
+    cout << "2. Withdraw" << endl;
+    cout << "3. Send Cash" << endl;
+    cout << "4. Check Balance" << endl;
+    cout << "5. Exit" << endl;
+    cout << "Enter choice: " << endl;
+
+    cin >> option;
+
+    switch (option)
+    {
+        case 1:
+            deposit();
+            break;
+
+        case 2:
+            withdraw();
+            break;
+
+        case 3:
+            sendCash();
+            break;
+
+        case 4:
+            checkBalance();
+            break;
+
+        case 5:
+            cout << "Thank you for using GCC Bank!" << endl;
+            break;
+
+        default:
+            cout << "Please enter a valid choice from 1 to 5." << endl;
+            break;
+    }
+}
+
+
 int main()
 {
-    // Variables
-    int numberOfEmployees;
-    double totalPayroll = 0.0;
-
-    // Performance counters
-    int excellentCount = 0;
-    int goodCount = 0;
-    int satisfactoryCount = 0;
-    int improvementCount = 0;
-
-    // Displaying the heading of the payroll system.
-    cout << "****************************************************" << endl;
-    cout << "              GAUTENG CITY COLLEGE" << endl;
-    cout << "                 PAYROLL SYSTEM" << endl;
-    cout << "****************************************************" << endl;
-
-    // Asking how many employees must be processed.
-    cout << "Enter the number of employees: ";
-
-    while (!(cin >> numberOfEmployees) || numberOfEmployees <= 0)
+    do
     {
-        cout << "Invalid input. Enter a number greater than zero: ";
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        showMenu();
     }
-
-    // Displaying money values.
-    cout << fixed << setprecision(2);
-
-    // Process each employee.
-    for (int i = 1; i <= numberOfEmployees; i++)
-    {
-        // Employee information.
-        string employeeID;
-        string employeeName;
-        string departmentName;
-        string performanceCategory;
-
-        // Salary and bonuses.
-        double basicSalary;
-        double performanceBonus;
-        double serviceBonus;
-        double departmentAllowance;
-        double totalPay;
-        double bonusRate;
-
-        // Employee details.
-        int rating;
-        int yearsOfService;
-        int departmentChoice;
-
-        // Employee heading.
-        cout << endl;
-        cout << "****************************************************" << endl;
-        cout << "                  EMPLOYEE " << i << endl;
-        cout << "****************************************************" << endl;
-
-        // Employee ID validation.
-        cout << "Enter employee ID: ";
-        cin >> ws;
-        getline(cin, employeeID);
-
-        while (employeeID.find_first_not_of(" \t") == string::npos)
-        {
-            cout << "Employee ID cannot be empty. Enter again: ";
-            getline(cin, employeeID);
-        }
-
-        // Employee name validation.
-        cout << "Enter employee name: ";
-        getline(cin, employeeName);
-
-        while (employeeName.find_first_not_of(" \t") == string::npos)
-        {
-            cout << "Name cannot be empty. Enter again: ";
-            getline(cin, employeeName);
-        }
-
-        // Displaying work departments.
-        cout << endl;
-        cout << "------------------ WORK DEPARTMENTS ----------------" << endl;
-        cout << "1. Engineering" << endl;
-        cout << "2. Management & Humanities" << endl;
-        cout << "3. Information Technology" << endl;
-        cout << "4. Media Studies" << endl;
-        cout << "5. Safety & Security" << endl;
-        cout << "6. Professional Studies" << endl;
-        cout << "7. Transport & Logistics" << endl;
-        cout << "8. Environmental Health" << endl;
-        cout << "----------------------------------------------------" << endl;
-
-        // Selecting a work department.
-        cout << "Select work department number: ";
-
-        while (!(cin >> departmentChoice) ||
-               departmentChoice < 1 || departmentChoice > 8)
-        {
-            cout << "Invalid choice. Enter a number from 1 to 8: ";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-
-        // Assigning the department and its allowance.
-        switch (departmentChoice)
-        {
-            case 1:
-                departmentName = "Engineering";
-                departmentAllowance = 500.00;
-                break;
-
-            case 2:
-                departmentName = "Management & Humanities";
-                departmentAllowance = 700.00;
-                break;
-
-            case 3:
-                departmentName = "Information Technology";
-                departmentAllowance = 600.00;
-                break;
-
-            case 4:
-                departmentName = "Media Studies";
-                departmentAllowance = 450.00;
-                break;
-
-            case 5:
-                departmentName = "Safety & Security";
-                departmentAllowance = 400.00;
-                break;
-
-            case 6:
-                departmentName = "Professional Studies";
-                departmentAllowance = 350.00;
-                break;
-
-            case 7:
-                departmentName = "Transport & Logistics";
-                departmentAllowance = 550.00;
-                break;
-
-            case 8:
-                departmentName = "Environmental Health";
-                departmentAllowance = 400.00;
-                break;
-
-        }
-
-        // Basic salary validation.
-        cout << "Enter basic salary (R): ";
-
-        while (!(cin >> basicSalary) || basicSalary <= 0)
-        {
-            cout << "Invalid salary. Enter an amount greater than zero: ";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-
-        // Performance rating validation.
-        cout << "Enter performance rating (0-100): ";
-
-        while (!(cin >> rating) || rating < 0 || rating > 100)
-        {
-            cout << "Invalid rating. Enter a number from 0 to 100: ";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-
-        // Years of service validation.
-        cout << "Enter completed years of service: ";
-
-        while (!(cin >> yearsOfService) || yearsOfService < 0)
-        {
-            cout << "Invalid input. Enter zero or a positive whole number: ";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-
-        // Determining the performance category and bonus rate.
-        if (rating >= 90)
-        {
-            performanceCategory = "Excellent";
-            bonusRate = 0.15;
-            excellentCount++;
-        }
-        else if (rating >= 75)
-        {
-            performanceCategory = "Good";
-            bonusRate = 0.10;
-            goodCount++;
-        }
-        else if (rating >= 50)
-        {
-            performanceCategory = "Satisfactory";
-            bonusRate = 0.05;
-            satisfactoryCount++;
-        }
-        else
-        {
-            performanceCategory = "Needs Improvement";
-            bonusRate = 0.00;
-            improvementCount++;
-        }
-
-        // Calculating the performance bonus.
-        performanceBonus = basicSalary * bonusRate;
-
-        // Calculating the service bonus.
-        if (yearsOfService <= 1)
-        {
-            serviceBonus = 0.00;
-        }
-        else if (yearsOfService <= 4)
-        {
-            serviceBonus = 500.00;
-        }
-        else if (yearsOfService <= 9)
-        {
-            serviceBonus = 1000.00;
-        }
-        else
-        {
-            serviceBonus = 1500.00;
-        }
-
-        // Calculating total employee pay.
-        totalPay = basicSalary + performanceBonus
-                   + serviceBonus + departmentAllowance;
-
-        // Updating total payroll.
-        totalPayroll += totalPay;
-
-        // Displaying the payroll slip.
-        cout << endl;
-        cout << "****************************************************" << endl;
-        cout << "                    PAYROLL SLIP" << endl;
-        cout << "****************************************************" << endl;
-
-        cout << endl;
-        cout << "EMPLOYEE DETAILS" << endl;
-        cout << "----------------------------------------------------" << endl;
-
-        cout << left << setw(28) << "Employee ID:"
-             << employeeID << endl;
-
-        cout << left << setw(28) << "Employee Name:"
-             << employeeName << endl;
-
-        cout << left << setw(28) << "Work Department:"
-             << departmentName << endl;
-
-        cout << endl;
-        cout << "SALARY AND BONUSES" << endl;
-        cout << "----------------------------------------------------" << endl;
-
-        cout << left << setw(28) << "Basic Salary:"
-             << right << "R " << setw(12) << basicSalary << endl;
-
-        cout << left << setw(28) << "Performance Rating:"
-             << right << setw(14) << rating << "/100" << endl;
-
-        cout << left << setw(28) << "Performance Category:"
-             << right << performanceCategory << endl;
-
-        cout << left << setw(28) << "Performance Bonus:"
-             << right << "R " << setw(12) << performanceBonus << endl;
-
-        cout << left << setw(28) << "Years of Service:"
-             << right << setw(14) << yearsOfService << endl;
-
-        cout << left << setw(28) << "Service Bonus:"
-             << right << "R " << setw(12) << serviceBonus << endl;
-
-        cout << left << setw(28) << "Department Allowance:"
-             << right << "R " << setw(12) << departmentAllowance << endl;
-
-        cout << "----------------------------------------------------" << endl;
-
-        cout << left << setw(28) << "TOTAL PAY:"
-             << right << "R " << setw(12) << totalPay << endl;
-
-        cout << "****************************************************" << endl;
-        cout << "                 END OF PAYROLL SLIP" << endl;
-        cout << "****************************************************" << endl;
-    }
-
-    // Displaying the final payroll report.
-    cout << endl;
-    cout << "****************************************************" << endl;
-    cout << "                 FINAL PAYROLL REPORT" << endl;
-    cout << "****************************************************" << endl;
-
-    cout << left << setw(30) << "Employees Processed:"
-         << right << numberOfEmployees << endl;
-
-    cout << left << setw(30) << "Total Payroll Expenditure:"
-         << right << "R " << totalPayroll << endl;
-
-    // Performance category summary.
-    cout << endl;
-    cout << "PERFORMANCE CATEGORY SUMMARY" << endl;
-    cout << "----------------------------------------------------" << endl;
-
-    cout << left << setw(30) << "Excellent:"
-         << right << excellentCount << endl;
-
-    cout << left << setw(30) << "Good:"
-         << right << goodCount << endl;
-
-    cout << left << setw(30) << "Satisfactory:"
-         << right << satisfactoryCount << endl;
-
-    cout << left << setw(30) << "Needs Improvement:"
-         << right << improvementCount << endl;
-
-    cout << "****************************************************" << endl;
-    cout << "             PAYROLL PROCESSING COMPLETED" << endl;
-    cout << "****************************************************" << endl;
+    while (option != 5);
 
     return 0;
 }
